@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  cassandra-node1:
+    image: cassandra:latest
+    container_name: cassandra-node1
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+    volumes:
+      - cassandra-node1-data:/var/lib/cassandra
+
+  cassandra-node2:
+    image: cassandra:latest
+    container_name: cassandra-node2
+    ports:
+      - "9043:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+    volumes:
+      - cassandra-node2-data:/var/lib/cassandra
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "8501:8501"  # Vous pouvez ajuster le port en fonction de votre application
+    depends_on:
+      - cassandra-node1
+      - cassandra-node2
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8000:8000"  # Vous pouvez ajuster le port en fonction de votre application
+    depends_on:
+      - cassandra-node1
+      - cassandra-node2
+
+volumes:
+  cassandra-node1-data:
+  cassandra-node2-data:

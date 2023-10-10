@@ -1,0 +1,17 @@
+# Utilisez l'image de base Python
+FROM python:3.8
+
+# Copiez le code de votre application Streamlit dans le conteneur
+COPY . .
+
+# Copiez le fichier requirements.txt dans le conteneur
+COPY requirements.txt .
+
+# Installez les dépendances Python depuis requirements.txt
+RUN pip install -r requirements.txt
+
+# Exposez le port que Streamlit utilise par défaut (8501)
+EXPOSE 8501
+
+# Commande pour exécuter votre application Streamlit
+CMD ["streamlit", "run", "app.py"]
